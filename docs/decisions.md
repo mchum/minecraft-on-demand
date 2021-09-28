@@ -27,3 +27,4 @@ Considerations:
 
 ## Closing
 I don't give a crap baout cloud provider, I'm going to use GCP because I want to learn it.
+
