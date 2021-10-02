@@ -1,7 +1,6 @@
 #!/bin/sh
 installer_version="${INSTALLER_VERSION:-0.8.0}"
 server_version="${SERVER_VERSION:-1.17.1}"
-world_dir="${WORLD_DIR:-minecraft}"
 
 # Downlod fabric installer
 wget -O installer.jar \
@@ -19,17 +18,13 @@ echo "eula=true" > eula.txt
 
 # TODO: Download world save from Cloud Storage
 
-# Add world save when getting SIGTERM
+# TODO: Add world save when getting SIGTERM
 # https://cloud.google.com/run/docs/reference/container-contract#instance-shutdown
-mkdir -p "${world_dir}"
 on_term() {
-    local filename="${1:-worldsave.tar.gz}"
-    tar --exclude "${world_dir}/mods" -zcf "${filename}" "${world_dir}"
-    # TODO: Upload to Cloud Storage
     trap - EXIT
     kill -s EXIT ${$}
 }
 trap on_term SIGTERM
 
 # Start the server
-java -jar fabric-server-launch.jar -dir "${world_dir}"
+java -jar fabric-server-launch.jar
