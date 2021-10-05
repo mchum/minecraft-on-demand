@@ -18,17 +18,9 @@ resource "google_cloud_run_service" "minecraft" {
 
         spec {
             containers {
-                image           = "us-east1-docker.pkg.dev/minecraft-on-demand-327813/minecraft-server/minecraft-server:latest"
+                image           = "us-east1-docker.pkg.dev/minecraft-on-demand-327813/registry/minecraft:latest"
                 ports {
                     container_port  = 25565
-                }
-                env {
-                    name    = "TYPE"
-                    value   = "FABRIC"
-                }
-                env {
-                    name    = "EULA"
-                    value   = "TRUE"
                 }
                 resources {
                     limits = {
