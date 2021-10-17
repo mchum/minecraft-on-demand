@@ -18,13 +18,14 @@ echo "eula=true" > eula.txt
 
 # TODO: Download world save from Cloud Storage
 
-# TODO: Add world save when getting SIGTERM
+# TODO: Add world save when exiting
 # https://cloud.google.com/run/docs/reference/container-contract#instance-shutdown
-on_term() {
+on_exit() {
+    ls -lR /fabric
     trap - EXIT
     kill -s EXIT ${$}
 }
-trap on_term SIGTERM
+trap on_exit EXIT
 
 # Start the server
-java -jar fabric-server-launch.jar
+java -jar fabric-server-launch.jar --nogui
