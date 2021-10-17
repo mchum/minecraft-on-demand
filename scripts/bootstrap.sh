@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 installer_version="${INSTALLER_VERSION:-0.8.0}"
 server_version="${SERVER_VERSION:-1.17.1}"
 
@@ -20,12 +20,11 @@ echo "eula=true" > eula.txt
 
 # TODO: Add world save when exiting
 # https://cloud.google.com/run/docs/reference/container-contract#instance-shutdown
-on_exit() {
-    ls -lR /fabric
+function on_exit {
     trap - EXIT
     kill -s EXIT ${$}
 }
 trap on_exit EXIT
 
 # Start the server
-java -jar fabric-server-launch.jar --nogui
+java -jar fabric-server-launch.jar

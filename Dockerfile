@@ -1,13 +1,17 @@
-FROM alpine:3.14
+FROM debian:stable-slim
 
-RUN apk add openjdk16-jre --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing \
-  && addgroup -g 1000 -S minecraft \
-  && adduser -u 1000 -HD -G minecraft minecraft \
-  && mkdir -m 755 -p /fabric \
-  && chown minecraft:minecraft /fabric
+WORKDIR /src
+RUN apt-get update && apt-get upgrade \
+  && apt-get install -y wget \
+  && mkdir -p java \
+  && wget -O jdk.tar.gz https://download.java.net/java/GA/jdk16.0.2/d4a915d82b4c4fbb9bde534da945d746/7/GPL/openjdk-16.0.2_linux-x64_bin.tar.gz  \
+  && tar -zxf jdk.tar.gz -C java --strip-components 1 \
+  && groupadd -g 1000 minecraft \
+  && useradd -u 1000 -Mg minecraft minecraft \
+  && chown minecraft:minecraft /src
 
-WORKDIR /fabric
-COPY --chown=minecraft:minecraft scripts/bootstrap.sh /fabric/bootstrap.sh
+ENV PATH="/src/java/bin:${PATH}"
+COPY --chown=minecraft:minecraft scripts/bootstrap.sh /src/bootstrap.sh
 EXPOSE 25565
 USER minecraft
-ENTRYPOINT [ "/fabric/bootstrap.sh" ]
+ENTRYPOINT [ "/src/bootstrap.sh" ]
