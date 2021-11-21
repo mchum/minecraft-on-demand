@@ -20,11 +20,10 @@ echo "eula=true" > eula.txt
 
 # TODO: Add world save when exiting
 # https://cloud.google.com/run/docs/reference/container-contract#instance-shutdown
-function on_exit {
-    trap - EXIT
-    kill -s EXIT ${$}
+function graceful_shutdown {
+    echo "Shutting down server"
 }
-trap on_exit EXIT
+trap graceful_shutdown SIGTERM
 
 # Start the server
 java -jar fabric-server-launch.jar
